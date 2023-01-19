@@ -1,0 +1,30 @@
+body {
+  min-height: 100vh;
+  margin: 0;
+}
+
+.header {
+  display: flex;
+  background-color: #e5e5e5;
+  justify-content: center;
+  min-height: 10vh;
+  padding: 20px;
+  margin: 0;
+}
+
+.header h1 {
+  font-size: 32px;
+}
+
+.main {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  grid-template-rows: 150px 600px 1fr;
+  grid-template-areas:
+    ". info"
+    "vsbox game"
+    ". .";
+  background-color: #ffffff;
+  padding: 20px;
+  height: 80vh;
+}
