@@ -18,13 +18,51 @@ body {
 
 .main {
   display: grid;
-  grid-template-columns: 280px 1fr;
-  grid-template-rows: 150px 600px 1fr;
+  grid-template-columns: 280px 1fr 280px;
+  grid-template-rows: 80px 550px 1fr;
   grid-template-areas:
-    ". info"
-    "vsbox game"
-    ". .";
+    ". info ."
+    "vsbox game ."
+    ". . .";
   background-color: #ffffff;
   padding: 20px;
   height: 80vh;
+  margin: 0;
+}
+
+.play {
+  grid-area: game;
+  height: 450px;
+  width: 450px;
+  background-color: #e5e5e5;
+  padding: 30px;
+  /* display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3 1fr);
+  gap: none;
+  column-gap: none;
+  margin: auto;
+  place-content: center; */
+
+  display: flex;
+  flex-wrap: wrap;
+  gap: none;
+  justify-content: center;
+  place-self: center;
+  row-gap: none;
+}
+
+.box {
+  border: 1px solid #14213d;
+  border-collapse: collapse;
+  box-sizing: border-box;
+  height: 150px;
+  width: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 30px;
+  color: black;
+  margin-left: -1px;
+  margin-bottom: -1px;
 }
