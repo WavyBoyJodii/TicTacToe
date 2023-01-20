@@ -9,6 +9,7 @@ const Gameboard = (() => {
       box.classList.add('box');
       box.textContent = gameboard[i];
       box.dataset.index = i;
+      box.addEventListener('click', Player.select)
       gameBox.appendChild(box);
       }
   }
@@ -18,7 +19,14 @@ const Gameboard = (() => {
 const Player = (name, symbol) => {
   const getName = () => name;
   const getSymbol = () => symbol;
-  return {getName, getSymbol};
+  const select = (e) => {
+    let choice = getSymbol();
+    let index = this.dataset.index;
+    if (gameboard[index] === "X" || "O") {
+      return} else {
+      gameboard[index] = choice;}
+    }
+  return {getName, getSymbol, select};
 };
 
 

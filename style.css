@@ -30,6 +30,26 @@ body {
   margin: 0;
 }
 
+.vsbox {
+  grid-area: vsbox;
+  display: flex;
+  flex-direction: column;
+  padding: 30px;
+  background-color: #fca311;
+  height: 450px;
+  width: 180px;
+  border-top-right-radius: 35px;
+  border-bottom-right-radius: 35px;
+  place-self: center;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+.vsbox h2,
+.vsbox h3 {
+  font-size: 28px;
+}
+
 .play {
   grid-area: game;
   height: 450px;
