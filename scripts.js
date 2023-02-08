@@ -78,7 +78,84 @@ const Game = (() => {
         page.appendChild(winnerCircle);
         winnerCircle.textcontent = `Tie Round!`
       };
-   };     
+   };
+   
+  startGameForm = () => {
+    const form = document.createElement('form');
+    form.setAttribute("method", "post");
+    form.setAttribute("action", "example.com/path");
+    
+    const player1Label = document.createElement('label');
+    player1Label.setAttribute('for', 'player1Name');
+    player1Label.textContent = "Player 1's Name:";
+    const player1Name = document.createElement('input');
+    player1Name.setAttribute('type', 'text');
+    player1Name.setAttribute('id', 'player1Name');
+    player1Name.setAttribute('name', 'player1Name');  
+    
+    const player2Label = document.createElement('label');
+    player2Label.setAttribute('for', 'player1Name');
+    player2Label.textContent = "Player 2's Name:";
+    const player2Name = document.createElement('input');
+    player2Name.setAttribute('type', 'text');
+    player2Name.setAttribute('id', 'player2Name');
+    player2Name.setAttribute('name', 'player2Name');
+    
+    const xSymbolLabel = document.createElement('label');
+    xSymbolLabel.setAttribute('for', 'X');
+    xSymbolLabel.textContent = "X";
+    const xSymbol = document.createElement('input');
+    xSymbol.setAttribute('type', 'radio');
+    xSymbol.setAttribute('id', 'X');
+    xSymbol.setAttribute('name', 'symbol');
+    xSymbol.setAttribute('value', 'X');
+      
+    const oSymbolLabel = document.createElement('label');
+    oSymbolLabel.setAttribute('for', 'O');
+    oSymbolLabel.textContent = "O";
+    const oSymbol = document.createElement('input');
+    oSymbol.setAttribute('type', 'radio');
+    oSymbol.setAttribute('id', 'O');
+    oSymbol.setAttribute('name', 'symbol');
+    oSymbol.setAttribute('value', 'O');
+    
+    const formButton = document.createElement('button');
+    formButton.textContent = 'Submit';
+    formButton.addEventListener('click', addBothPlayers, false);
+    
+    const symbolValue = function displayRadioValue() {
+      let ele = document.getElementsByName('symbol'); 
+      for(i = 0; i < ele.length; i++) {
+          if(ele[i].checked) {
+          let answer = ele[i].value;
+          return answer
+          }
+        }
+      }
+      
+    const notSymbolValue = function displayRadioValue() {
+      let ele = document.getElementsByName('symbol'); 
+      for(i = 0; i < ele.length; i++) {
+          if(!(ele[i].checked)) {
+          let answer = ele[i].value;
+          return answer
+          }
+        }
+      }
+        
+    function addBothPlayers(event) {
+      event.preventDefault();
+      addPlayer(player1Name.value, symbolValue);
+      addPlayer(player2Name.value, notSymbolValue);
+      infoBox.removeChild(form);
+      whosTurn();
+      };
+        
+    form.append(player1Label, player1Name, player2Label, player2Name, xSymbolLabel, xSymbol, oSymbolLabel, oSymbol, formButton);
+    
+    infoBox.removeChild(startGameButton);
+    infoBox.append(form); 
+    }; 
   return {addPlayer, whosTurn, makeMove};
 })();    
 
