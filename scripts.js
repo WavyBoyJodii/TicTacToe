@@ -65,7 +65,7 @@ const Player = (name, symbol) => {
   const select = (x) => {
     let choice = getSymbol();
     // let index = x;
-    if (Gameboard.gameboard[x] === 'undefined') {
+    if (Gameboard.gameboard[x] === 'undefined' || Gameboard.gameboard[x] === 'X' || Gameboard.gameboard[x] === 'O') {
       console.log(Gameboard.gameboard[x]);  
       return} else {
       Gameboard.gameboard[x] = choice;
