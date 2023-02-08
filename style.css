@@ -46,6 +46,13 @@ body {
   border-radius: 25px;
 }
 
+.startGameButton {
+  height: 40px;
+  width: 70px;
+  font-weight: bold;
+  font-size: large;
+}
+
 .vsbox {
   grid-area: vsbox;
   display: flex;
