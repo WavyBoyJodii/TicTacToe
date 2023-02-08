@@ -22,12 +22,28 @@ body {
   grid-template-rows: 80px 550px 1fr;
   grid-template-areas:
     ". info ."
-    "vsbox game ."
+    "vsbox game winnercircle"
     ". . .";
-  background-color: #ffffff;
+  background-color: #14213d;
   padding: 20px;
-  height: 80vh;
+  height: 80.8vh;
   margin: 0;
+}
+
+.infobox {
+  grid-area: info;
+  display: flex;
+  flex-direction: row;
+  padding: 30px;
+  background-color: #ffffff;
+  width: 600px;
+  height: 40px;
+  place-self: center;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  border: solid 2px black;
+  border-radius: 25px;
 }
 
 .vsbox {
@@ -85,4 +101,20 @@ body {
   color: black;
   margin-left: -1px;
   margin-bottom: -1px;
+}
+
+.winnercircle {
+  grid-area: winnercircle;
+  display: flex;
+  flex-direction: column;
+  padding: 30px;
+  background-color: #fca311;
+  height: 450px;
+  width: 180px;
+  border-top-left-radius: 35px;
+  border-bottom-left-radius: 35px;
+  place-self: center;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
 }

@@ -1,39 +1,45 @@
 const page = document.querySelector(".main");
 const gameBox = document.querySelector('.play');
+const infoBox = document.querySelector('.infobox');
 
 const Game = (() => {
-    let playerCounter = 0;
-    let turnCounter = 0;
-    let players = [];
-    const addPlayer = (x) => {
-      if (playerCounter > 1) {
-        console.log('returning');
-        return} 
-        else {
-          playerCounter++;
-          console.log(playerCounter);    
-          players.push(x);}
-        };
+  const winnerCircle = document.createElement("div");
+  winnerCircle.classList.add("winnercirlce");
+  let playerCounter = 0;
+  let turnCounter = 0;
+  let players = [];
+  let player1Wins = 0;
+  let player2Wins = 0;
+  const addPlayer = (name, symbol) => {
+    if (playerCounter > 1) {
+      console.log('returning');
+      return} 
+      else {
+        const player = Player(name, symbol);
+        playerCounter++;
+        console.log(playerCounter);    
+        players.push(player);}
+      };
         
-    const whosTurn = () => {
-      let turn;
-      if (turnCounter === 0) {
-        turn = players[0];
-        turnCounter++;}
-        else { 
-          turn = players[1];
-          turnCounter--;}
-        return turn;  
-        };
-    const makeMove = x => {
-      let currentPlayer = whosTurn();
-      currentPlayer.select(x);
-    };      
-    return {addPlayer, whosTurn, makeMove};
+  const whosTurn = () => {
+    let turn;
+    if (turnCounter === 0) {
+      turn = players[0];
+      turnCounter++;}
+      else { 
+        turn = players[1];
+        turnCounter--;}
+      return turn;  
+      };
+  const makeMove = x => {
+    let currentPlayer = whosTurn();
+    currentPlayer.select(x);
+  };      
+  return {addPlayer, whosTurn, makeMove};
 })();    
 
 const Gameboard = (() => {
-  const gameboard = ["X","O",,,,,,"O",,];
+  const gameboard = [,,,,,,,,,];
   const init = () => {
     for (let i=0; i<gameboard.length; i++) {
       const box = document.createElement('div');
