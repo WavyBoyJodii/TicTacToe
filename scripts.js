@@ -2,14 +2,12 @@ const page = document.querySelector(".main");
 const gameBox = document.querySelector('.play');
 const infoBox = document.querySelector('.infobox');
 const startGameButton = document.createElement('button');
+const newGameButton = document.createElement('button');
 
-startGameButton.classList.add('startGameButton');
-startGameButton.textContent = 'Start';
-infoBox.appendChild(startGameButton);
 
 const Game = (() => {
   const winnerCircle = document.createElement("div");
-  winnerCircle.classList.add("winnercirlce");
+  winnerCircle.classList.add("winnercircle");
   let playerCounter = 0;
   let turnCounter = 0;
   let players = [];
@@ -30,57 +28,79 @@ const Game = (() => {
     let turn;
     if (turnCounter === 0) {
       turn = players[0];
-      infoBox.textContent = `${players[0].getName}'s Turn`;
+      infoBox.textContent = `${players[0].getName()}'s Turn`;
       turnCounter++;}
       else { 
         turn = players[1];
-        infoBox.textContent = `${players[1].getName}'s Turn`;
+        infoBox.textContent = `${players[1].getName()}'s Turn`;
         turnCounter--;}
       return turn;  
       };
   const makeMove = x => {
     let currentPlayer = whosTurn();
     currentPlayer.select(x);
+    checkRoundWin();
+    checkGameWin();
   }; 
   const checkRoundWin = () => {
     if((Gameboard.gameboard[0] && Gameboard.gameboard[1] && Gameboard.gameboard[2]) === 'X' || (Gameboard.gameboard[0] && Gameboard.gameboard[3] && Gameboard.gameboard[6]) === 'X' || (Gameboard.gameboard[0] && Gameboard.gameboard[4] && Gameboard.gameboard[8]) === 'X' || (Gameboard.gameboard[1] && Gameboard.gameboard[4] && Gameboard.gameboard[7]) === 'X' || (Gameboard.gameboard[2] && Gameboard.gameboard[5] && Gameboard.gameboard[8]) === 'X' || (Gameboard.gameboard[2] && Gameboard.gameboard[4] && Gameboard.gameboard[6]) === 'X' || (Gameboard.gameboard[3] && Gameboard.gameboard[4] && Gameboard.gameboard[5]) === 'X' || (Gameboard.gameboard[6] && Gameboard.gameboard[7] && Gameboard.gameboard[8]) === 'X') {
-      if (players[0].getsymbol() === 'X') {
-        console.log(`${players[0].getName} wins!`);
+      if (players[0].getSymbol() === 'X') {
+        console.log(`${players[0].getName()} wins!`);
         player1Wins++;
+        winnerCircle.textcontent = `${players[0].getName()} wins the round!`;
         page.appendChild(winnerCircle);
-        winnerCircle.textcontent = `${players[0].getName} wins the round!`;
       } 
       else 
         { 
-          console.log(`${players[1].getName} wins!`);
+          console.log(`${players[1].getName()} wins!`);
           player2Wins++;
+          winnerCircle.textcontent = `${players[1].getName()} wins the round!`;
           page.appendChild(winnerCircle);
-          winnerCircle.textcontent = `${players[1].getName} wins the round!`;
         }
    } 
     else if( (Gameboard.gameboard[0] && Gameboard.gameboard[1] && Gameboard.gameboard[2]) === 'O' || (Gameboard.gameboard[0] && Gameboard.gameboard[3] && Gameboard.gameboard[6]) === 'O' || (Gameboard.gameboard[0] && Gameboard.gameboard[4] && Gameboard.gameboard[8]) === 'O' || (Gameboard.gameboard[1] && Gameboard.gameboard[4] && Gameboard.gameboard[7]) === 'O' || (Gameboard.gameboard[2] && Gameboard.gameboard[5] && Gameboard.gameboard[8]) === 'O' || (Gameboard.gameboard[2] && Gameboard.gameboard[4] && Gameboard.gameboard[6]) === 'O' || (Gameboard.gameboard[3] && Gameboard.gameboard[4] && Gameboard.gameboard[5]) === 'O' || (Gameboard.gameboard[6] && Gameboard.gameboard[7] && Gameboard.gameboard[8]) === 'O') {
-      if (players[0].getsymbol() === 'O') {
-        console.log(`${players[0].getName} wins the round!`);
+      if (players[0].getSymbol() === 'O') {
+        console.log(`${players[0].getName()} wins the round!`);
         player1Wins++;
+        winnerCircle.textcontent = `${players[0].getName()} wins the round!`
         page.appendChild(winnerCircle);
-        winnerCircle.textcontent = `${players[0].getName} wins the round!`}
+        }
       else 
         {
-          console.log(`${players[1].getName} wins!`);
+          console.log(`${players[1].getName()} wins!`);
           player2Wins++;
+          winnerCircle.textcontent = `${players[1].getName()} wins the round!`
           page.appendChild(winnerCircle);
-          winnerCircle.textcontent = `${players[1].getName} wins the round!`
         }
+      }
+    else if(Gameboard.gameboard.includes(undefined))
+      {
+        return
       }
     else 
       { 
         console.log('Its a Tie!');
-        page.appendChild(winnerCircle);
         winnerCircle.textcontent = `Tie Round!`
+        page.appendChild(winnerCircle);
       };
    };
    
-  startGameForm = () => {
+  const checkGameWin = () => {
+    if( player1Wins === 5) {
+      console.log(`${players[0].getName()} Wins!`);
+      winnerCircle.textContent = `${players[0].getName()} Wins!`;
+      page.append(winnerCircle);
+      Gameboard.end();
+      }
+    else if( player2Wins === 5) {
+      console.log(`${players[1].getName()} Wins!`);
+      winnerCircle.textContent = `${players[1].getName()} Wins!`;
+      page.append(winnerCircle);
+      Gameboard.end();
+      }
+    else return;  
+  }   
+  const startGameForm = () => {
     const form = document.createElement('form');
     form.setAttribute("method", "post");
     form.setAttribute("action", "example.com/path");
@@ -145,18 +165,47 @@ const Game = (() => {
         
     function addBothPlayers(event) {
       event.preventDefault();
-      addPlayer(player1Name.value, symbolValue);
-      addPlayer(player2Name.value, notSymbolValue);
+      addPlayer(player1Name.value, symbolValue());
+      console.log(player1Name.value);
+      addPlayer(player2Name.value, notSymbolValue());
       infoBox.removeChild(form);
+      Gameboard.init();
       whosTurn();
       };
         
     form.append(player1Label, player1Name, player2Label, player2Name, xSymbolLabel, xSymbol, oSymbolLabel, oSymbol, formButton);
     
-    infoBox.removeChild(startGameButton);
+    const whichButton = () => {
+      if(infoBox.children[0] === startGameButton) {
+        infoBox.removeChild(startGameButton);
+      }
+      else{
+        infoBox.removeChild(newGameButton)
+      }
+    };
+    whichButton();
     infoBox.append(form); 
-    }; 
-  return {addPlayer, whosTurn, makeMove};
+  }; 
+  const startGame = () => {
+    // playerCounter = 0;
+    // turnCounter = 0;
+    // players = [];
+    // player1Wins = 0;
+    // player2Wins = 0;
+    // Gameboard.gameboard = [,,,,,,,,,];
+    startGameForm();
+    };
+
+  const newGame = () => {
+    playerCounter = 0;
+    turnCounter = 0;
+    players = [];
+    player1Wins = 0;
+    player2Wins = 0;
+    Gameboard.gameboard = [,,,,,,,,,];
+    startGameForm();
+  }  
+  return {addPlayer, whosTurn, makeMove, startGame, newGame, players};
 })();    
 
 const Gameboard = (() => {
@@ -174,6 +223,20 @@ const Gameboard = (() => {
       gameBox.appendChild(box);
       }
   }
+  const end = () => {
+    for (let i=0; i<gameboard.length; i++) {
+      const box = document.createElement('div');
+      box.classList.add('box');
+      box.textContent = gameboard[i];
+      box.dataset.index = i;
+      gameBox.appendChild(box);
+      infoBox.textContent = '';
+      newGameButton.classList.add('startGameButton');
+      newGameButton.textContent = 'New Game';
+      newGameButton.addEventListener('click', Game.newGame);
+      infoBox.append(newGameButton);
+      }
+  }
   const removeAllChildNodes = (parent) => {
     while (parent.firstChild) {
         parent.removeChild(parent.firstChild);
@@ -183,7 +246,7 @@ const Gameboard = (() => {
   //   let currentPlayer = Game.whosTurn();
   //   currentPlayer.select(x);
   // };    
-  return {gameboard, init, removeAllChildNodes};
+  return {gameboard, init, end, removeAllChildNodes};
 })();
    
 const Player = (name, symbol) => { 
@@ -202,13 +265,10 @@ const Player = (name, symbol) => {
   return {getName, getSymbol, select};
 };
 
-const jodii = Player('Jodii', 'X');
-const eli = Player('Eli', 'O');
+startGameButton.classList.add('startGameButton');
+startGameButton.textContent = 'Start';
+startGameButton.addEventListener('click', Game.startGame);
+infoBox.appendChild(startGameButton);
 
 
-Game.addPlayer(jodii);
-Game.addPlayer(eli);
-Gameboard.init();
-
-eli.select(3);
-jodii.select(8);
+// Gameboard.init();
