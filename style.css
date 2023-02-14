@@ -66,11 +66,17 @@ body {
   place-self: center;
   justify-content: center;
   align-items: center;
-  gap: 20px;
+  gap: 15px;
 }
 .vsbox h2,
 .vsbox h3 {
   font-size: 28px;
+}
+
+.winbox {
+  border: solid 4px #14213d;
+  height: 70px;
+  width: 70px;
 }
 
 .play {
@@ -124,4 +130,5 @@ body {
   justify-content: center;
   align-items: center;
   gap: 20px;
+  font-size: 30px;
 }
