@@ -1,5 +1,5 @@
 const page = document.querySelector(".main");
-const gameBox = document.querySelector('.play');
+const gameBox = document.querySelectorAll('.box');
 const infoBox = document.querySelector('.infobox');
 const startGameButton = document.createElement('button');
 const newGameButton = document.createElement('button');
@@ -7,6 +7,8 @@ const vsPlayer1 = document.getElementById('player1');
 const vsPlayer2 = document.getElementById('player2');
 const p1wins = document.getElementById('p1Wins');
 const p2wins = document.getElementById('p2Wins');
+let running = false;
+let gameboard = ['','','','','','','','','',];
 
 
 const Game = (() => {
@@ -20,6 +22,7 @@ const Game = (() => {
     [0, 4, 8],
     [2, 4, 6]
   ];
+  // let gameboard = ['','','','','','','','','',];
   const winnerCircle = document.createElement("div");
   winnerCircle.classList.add("winnercircle");
   let playerCounter = 0;
@@ -27,6 +30,10 @@ const Game = (() => {
   let players = [];
   let player1Wins = 0;
   let player2Wins = 0;
+  const init = () => {
+    gameBox.forEach(box => box.addEventListener('click', makeMove))
+    running = true;
+  }
   const addPlayer = (name, symbol) => {
     if (playerCounter > 1) {
       console.log('returning');
@@ -50,20 +57,21 @@ const Game = (() => {
         turnCounter--;}
       return turn;  
       };
-  const makeMove = x => {
+  function makeMove() {
+    let boxIndex = this.getAttribute('boxIndex');
     let currentPlayer = whosTurn();
-    currentPlayer.select(x);
+    currentPlayer.select(this, boxIndex);
     if (checkRoundWin(currentPlayer)) {
       endRound(false, currentPlayer)
     } else if(isDraw()) {
       endRound(true)
     };
-    // checkGameWin();
+    checkGameWin();
   }; 
   function checkRoundWin(currentPlayer) {
     return WINNING_COMBINATIONS.some(combination => {
       return combination.every(index => {
-        return Gameboard.gameboard[index] === currentPlayer.getSymbol()
+        return gameboard[index] === currentPlayer.getSymbol()
       })
     })
   };
@@ -72,9 +80,7 @@ const Game = (() => {
       console.log('Its a Tie!');
       winnerCircle.textContent = `Tie Round!`;
       page.appendChild(winnerCircle);
-      Gameboard.reset();
-      turnCounter = 0;
-      Gameboard.init();
+      reset();
       infoBox.textContent = `New Round  its ${players[0].getName()}'s Turn`;
     
     } else {
@@ -82,43 +88,55 @@ const Game = (() => {
       winnerCircle.textContent = `${currentPlayer.getName()} wins the round!`;
       page.appendChild(winnerCircle);
       whoWon(currentPlayer);
-      Gameboard.reset();
-      turnCounter = 0;
-      Gameboard.init();
+      console.log('resetting game');
+      reset();
+      console.log(`${gameboard}`);
       infoBox.textContent = `New Round  its ${players[0].getName()}'s Turn`;
     }
   }
   function whoWon(currentPlayer) {
     if (currentPlayer === players[0]) {
       player1Wins++
+      p1wins.textContent = player1Wins;
     } else {
       player2Wins++
+      p2wins.textContent = player2Wins;
     }   
-  }
-  // function isDraw() {
-  //   return Gameboard.gameboard.every(index => {
-  //     return index.value === 'X' || index.value === 'O'
-  //     })
-  //   }   
+  }  
   function isDraw() {
-    if (!Gameboard.gameboard.includes('')) {
+    if (!gameboard.includes('')) {
       return true
     } else {
       return false
     }
+  }
+  const reset = () => {
+    turnCounter = 0;
+    gameboard = ['','','','','','','','','',];
+    gameBox.forEach(box => box.textContent = '');
+    running = true;
+  }
+  const end = () => {
+    reset();
+    gameBox.forEach(box => box.removeEventListener('click', makeMove));
+    infoBox.textContent = '';
+    newGameButton.addEventListener('click', newGame);
+    newGameButton.classList.add('newGameButton');
+    newGameButton.textContent = 'New Game';
+    infoBox.appendChild(newGameButton);
   }
   const checkGameWin = () => {
     if( player1Wins === 5) {
       console.log(`${players[0].getName()} Wins!`);
       winnerCircle.textContent = `${players[0].getName()} Wins!`;
       page.append(winnerCircle);
-      Gameboard.end();
+      end();
       }
     else if( player2Wins === 5) {
       console.log(`${players[1].getName()} Wins!`);
       winnerCircle.textContent = `${players[1].getName()} Wins!`;
       page.append(winnerCircle);
-      Gameboard.end();
+      end();
       }
     else return;  
   }   
@@ -126,7 +144,11 @@ const Game = (() => {
     const form = document.createElement('form');
     form.setAttribute("method", "post");
     form.setAttribute("action", "example.com/path");
+    form.classList.add('fields2');
     
+    const playerField = document.createElement('fieldset');
+    playerField.classList.add('fields');
+
     const player1Label = document.createElement('label');
     player1Label.setAttribute('for', 'player1Name');
     player1Label.textContent = "Player 1's Name:";
@@ -143,6 +165,10 @@ const Game = (() => {
     player2Name.setAttribute('id', 'player2Name');
     player2Name.setAttribute('name', 'player2Name');
     
+    const radioField = document.createElement('fieldset');
+    radioField.classList.add('fields');
+
+
     const xSymbolLabel = document.createElement('label');
     xSymbolLabel.setAttribute('for', 'X');
     xSymbolLabel.textContent = "X";
@@ -151,6 +177,7 @@ const Game = (() => {
     xSymbol.setAttribute('id', 'X');
     xSymbol.setAttribute('name', 'symbol');
     xSymbol.setAttribute('value', 'X');
+    xSymbol.setAttribute('checked','true');
       
     const oSymbolLabel = document.createElement('label');
     oSymbolLabel.setAttribute('for', 'O');
@@ -160,6 +187,7 @@ const Game = (() => {
     oSymbol.setAttribute('id', 'O');
     oSymbol.setAttribute('name', 'symbol');
     oSymbol.setAttribute('value', 'O');
+    
     
     const formButton = document.createElement('button');
     formButton.textContent = 'Submit';
@@ -195,11 +223,13 @@ const Game = (() => {
       addPlayer(player2Name.value, notSymbolValue());
       vsPlayer2.textContent = `${player2Name.value}`;
       infoBox.removeChild(form);
-      Gameboard.init();
+      Game.init();
       infoBox.textContent = `${players[0].getName()}'s Turn`;
       };
-        
-    form.append(player1Label, player1Name, player2Label, player2Name, xSymbolLabel, xSymbol, oSymbolLabel, oSymbol, formButton);
+    
+    playerField.append(player1Label, player1Name, player2Label, player2Name);
+    radioField.append(xSymbolLabel, xSymbol, oSymbolLabel, oSymbol);  
+    form.append(playerField, radioField, formButton);
     
     const whichButton = () => {
       if(infoBox.children[0] === startGameButton) {
@@ -228,72 +258,29 @@ const Game = (() => {
     players = [];
     player1Wins = 0;
     player2Wins = 0;
-    Gameboard.gameboard = [,,,,,,,,,];
+    gameboard = ['','','','','','','','','',];
     winnerCircle.textContent = '';
     page.removeChild(winnerCircle);
     startGameForm();
   }  
-  return {addPlayer, whosTurn, makeMove, startGame, newGame, players};
+  return {addPlayer, whosTurn, makeMove, startGame, newGame, init, gameboard, players};
 })();    
 
-const Gameboard = (() => {
-  let gameboard = ['','','','','','','','','',];
-  const init = () => {
-    removeAllChildNodes(gameBox);
-    for (let i=0; i<gameboard.length; i++) {
-      const box = document.createElement('div');
-      box.classList.add('box');
-      box.textContent = gameboard[i];
-      box.dataset.index = i;
-      box.addEventListener('click', function(event){
-        Game.makeMove(event.target.dataset.index);
-      });
-      gameBox.appendChild(box);
-      }
-  }
-  const end = () => {
-    for (let i=0; i<gameboard.length; i++) {
-      const box = document.createElement('div');
-      box.classList.add('box');
-      box.textContent = gameboard[i];
-      box.dataset.index = i;
-      gameBox.appendChild(box);
-      infoBox.textContent = '';
-      newGameButton.classList.add('startGameButton');
-      newGameButton.textContent = 'New Game';
-      newGameButton.addEventListener('click', Game.newGame);
-      infoBox.append(newGameButton);
-      }
-  }
-  const removeAllChildNodes = (parent) => {
-    while (parent.firstChild) {
-        parent.removeChild(parent.firstChild);
-    }
-  }
-  const reset = () => {
-    gameboard = [,,,,,,,,,];
-    removeAllChildNodes(gameBox);
-  }
-  // const makeMove = x => {
-  //   let currentPlayer = Game.whosTurn();
-  //   currentPlayer.select(x);
-  // };    
-  return {gameboard, init, end, reset, removeAllChildNodes};
-})();
    
 const Player = (name, symbol) => { 
   const getName = () => name;
   const getSymbol = () => symbol;
-  const select = (x) => {
+  const select = (box, x) => {
     let choice = getSymbol();
     // let index = x;
-    if (Gameboard.gameboard[x] === 'undefined' || Gameboard.gameboard[x] === 'X' || Gameboard.gameboard[x] === 'O') {
-      console.log(Gameboard.gameboard[x]);  
-      return} else {
-      Gameboard.gameboard[x] = choice;
-      Gameboard.removeAllChildNodes(gameBox);
-      Gameboard.init();}
+    if (gameboard[x] != '' || !running) {  
+      return console.log('gameboard either not empty or not running');
+    } else {
+      gameboard[x] = choice;
+      box.textContent = choice;
+      console.log(gameboard);
     };
+  }
   return {getName, getSymbol, select};
 };
 

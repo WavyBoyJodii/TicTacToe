@@ -19,7 +19,7 @@ body {
 .main {
   display: grid;
   grid-template-columns: 280px 1fr 280px;
-  grid-template-rows: 80px 550px 1fr;
+  grid-template-rows: 100px 550px 1fr;
   grid-template-areas:
     ". info ."
     "vsbox game winnercircle"
@@ -37,7 +37,7 @@ body {
   padding: 30px;
   background-color: #ffffff;
   width: 600px;
-  height: 40px;
+  height: 70px;
   place-self: center;
   justify-content: center;
   align-items: center;
@@ -46,9 +46,32 @@ body {
   border-radius: 25px;
 }
 
+.fields {
+  border: none;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+}
+.fields2 {
+  border: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 .startGameButton {
   height: 40px;
   width: 70px;
+  font-weight: bold;
+  font-size: large;
+}
+
+.newGameButton {
+  height: 50px;
+  width: 80px;
   font-weight: bold;
   font-size: large;
 }
@@ -77,6 +100,11 @@ body {
   border: solid 4px #14213d;
   height: 70px;
   width: 70px;
+  font-size: 30px;
+  color: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .play {
