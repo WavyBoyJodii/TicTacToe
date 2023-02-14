@@ -50,13 +50,19 @@ const Game = (() => {
     if (turnCounter === 0) {
       turn = players[0];
       infoBox.textContent = `${players[1].getName()}'s Turn`;
-      turnCounter++;}
+      }
       else { 
         turn = players[1];
         infoBox.textContent = `${players[0].getName()}'s Turn`;
-        turnCounter--;}
+      }
       return turn;  
       };
+  const swapTurn = () => {
+    if (turnCounter === 0) {
+      turnCounter++;}
+      else { 
+        turnCounter--;}
+  };    
   function makeMove() {
     let boxIndex = this.getAttribute('boxIndex');
     let currentPlayer = whosTurn();
@@ -263,7 +269,7 @@ const Game = (() => {
     page.removeChild(winnerCircle);
     startGameForm();
   }  
-  return {addPlayer, whosTurn, makeMove, startGame, newGame, init, gameboard, players};
+  return {addPlayer, whosTurn, makeMove, startGame, newGame, init, swapTurn, gameboard, players};
 })();    
 
    
@@ -279,6 +285,7 @@ const Player = (name, symbol) => {
       gameboard[x] = choice;
       box.textContent = choice;
       console.log(gameboard);
+      Game.swapTurn();
     };
   }
   return {getName, getSymbol, select};
